@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.lmt.dao.NoteDao">
+
+    <!--and cn_note_status_id='1'-->
+    <!--
+    <select id="findByBookId" parameterType="string" resultType="com.Note">
+        select * from cn_note
+        where cn_notebook_id=#{bookId}
+        order by cn_note_create_time desc
+    </select>
+-->
+    <!--
+    <select id="findByBookId" parameterType="string" resultType="map">
+        select cn_note_id,cn_note_title from cn_note
+        where cn_notebook_id=#{bookId}
+        and cn_note_status_id='1'
+        order by cn_note_create_time
+    </select>
+-->
+    <select id="findByBookId" parameterType="com.lmt.entity.Note" resultType="map">
+        select cn_note_id,cn_note_title from cn_note
+        <where >
+            <if test="cn_notebook_id!=null">
+                and cn_notebook_id=#{cn_notebook_id}
+            </if>
+            <choose>
+                <when test="cn_note_status_id!=null">
+                    and cn_note_status_id='1'
+                </when>
+            </choose>
+        </where>
+        order by cn_note_create_time
+    </select>
+
+    <!-- 动态SQL，组合查询案例 -->
+    <select id="search" parameterType="java.util.HashMap" resultType="com.lmt.entity.Note">
+        select * from cn_note
+        <where >
+            <if test="title!=null">
+                and cn_note_title like #{title}
+            </if>
+            <!--
+            <if test="(type!=null and type!=0)">
+                and cn_note_type_id = #{type}
+            </if>
+
+            不能用'1'
+            <if test="type==1">
+                and cn_note_type_id = #{type}
+            </if>
+            <if test="type==2">
+                and cn_note_type_id = #{type}
+            </if>
+
+            <choose>
+                <when test="type==1">
+                    and cn_note_type_id = #{type}
+                </when>
+                <when test="type==2">
+                    and cn_note_type_id = #{type}
+                </when>
+                <otherwise>
+                    and cn_note_type_id in ('1','2')
+                </otherwise>
+            </choose>
+            -->
+            <choose>
+                <when test="type==1">
+                    and cn_note_type_id = #{type}
+                </when>
+                <when test="type==2">
+                    and cn_note_type_id = #{type}
+                </when>
+            </choose>
+            <if test="beginDate!=null">
+                and cn_note_create_time >= #{beginDate}
+            </if>
+            <if test="endDate!=null">
+                and cn_note_last_modify_time &lt;= #{endDate}
+            </if>
+        </where>
+        order by cn_note_create_time
+    </select>
+
+    <insert id="save" parameterType="com.lmt.entity.Note">
+        insert into cn_note(
+        cn_note_id,cn_notebook_id,cn_user_id,cn_note_status_id,
+        cn_note_type_id,cn_note_title,cn_note_body,cn_note_create_time,
+        cn_note_last_modify_time
+        )values(
+        #{cn_note_id},#{cn_notebook_id},#{cn_user_id},#{cn_note_status_id},
+        #{cn_note_type_id},#{cn_note_title},#{cn_note_body,jdbcType=VARCHAR},#{cn_note_create_time},
+        #{cn_note_last_modify_time}
+        )
+    </insert>
+
+    <select id="findById" parameterType="string" resultType="com.lmt.entity.Note">
+        select * from cn_note where cn_note_id=#{id}
+    </select>
+
+    <update id="dynamicUpdate" parameterType="com.lmt.entity.Note">
+        update cn_note
+        <set>
+            <if test="cn_note_title!=null">
+                cn_note_title=#{cn_note_title},
+            </if>
+            <if test="cn_note_status_id!=null">
+                cn_note_status_id=#{cn_note_status_id},
+            </if>
+            <if test="cn_notebook_id!=null">
+                cn_notebook_id=#{cn_notebook_id},
+            </if>
+            <if test="cn_note_body!=null">
+                cn_note_body=#{cn_note_body},
+            </if>
+            <if test="cn_note_last_modify_time!=null">
+                cn_note_last_modify_time=#{cn_note_last_modify_time}
+            </if>
+        </set>
+        where cn_note_id=#{cn_note_id}
+    </update>
+
+    <select id="findDeleteNote" parameterType="string" resultType="map">
+        select cn_note_id,cn_note_title from cn_note where cn_user_id=#{userId} and cn_note_status_id='2'
+    </select>
+    <!--
+    <delete id="batchDelete">
+    delete from cn_note where cn_note_id in
+    <foreach collection="array" item="id" open="(" close=")" separator=",">
+        #{id}
+    </foreach>
+    </delete>
+
+
+
+    <select id="findNotes" parameterType="com.lmt.entity.NoteBean" resultType="com.Note">
+    select * from cn_note
+    <where>
+        <if test="cn_note_title != null">
+            cn_note_title like #{cn_note_title}
+        </if>
+        <if test="cn_note_status_id != null">
+            and cn_note_status_id=#{cn_note_status_id}
+        </if>
+        <if test="beginTime != null">
+            and cn_note_create_time>#{beginTime}
+        </if>
+        <if test="endTime != null">
+            and cn_note_create_time&lt;#{endTime}
+        </if>
+    </where>
+    </select>
+
+    <update id="updateBookId" parameterType="map">
+    update cn_note
+    set cn_notebook_id=#{book_id}
+    where cn_note_id=#{note_id}
+    </update>
+
+    <update id="recycle" parameterType="string">
+    update cn_note
+    set cn_note_status_id='2'
+    where cn_note_id=#{id}
+    </update>
+
+    <update id="update" parameterType="com.Note">
+    update cn_note
+    set cn_note_title=#{cn_note_title},
+    cn_note_body=#{cn_note_body},
+    cn_note_last_modify_time=#{cn_note_last_modify_time}
+    where cn_note_id=#{cn_note_id}
+    </update>
+    -->
+</mapper>

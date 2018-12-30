@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.lmt.dao.ShareDao">
+    <insert id="save" parameterType="com.lmt.entity.Share">
+        insert into cn_share(
+        cn_share_id,cn_share_title,cn_share_body,cn_note_id)
+        values(
+        #{cn_share_id},#{cn_share_title},#{cn_share_body,jdbcType=VARCHAR},#{cn_note_id})
+    </insert>
+
+    <select id="findByNoteId" parameterType="string" resultType="com.lmt.entity.Share">
+        select * from cn_share where cn_note_id=#{noteId}
+    </select>
+    <!--
+        <select id="findLikeTitle" parameterType="string" resultType="map">
+            select cn_share_id,cn_share_title from cn_share where cn_share_title like #{title}
+        </select>
+     -->
+    <!--改成带分页功能的-->
+    <select id="findLikeTitle" parameterType="Map" resultType="map">
+        select cn_share_id,cn_share_title
+        from (
+        select cn_share_id,cn_share_title,rownum r
+        from cn_share
+        where cn_share_title like #{title}
+        and rownum &lt; #{page}*3+1
+        )
+        where r &gt; (#{page}-1)*3
+    </select>
+    <!--
+        <select id="findLikeTitle" parameterType="string" resultType="com.Share">
+            select * from cn_share where cn_share_title like #{title}
+        </select>
+    -->
+
+    <select id="findById" parameterType="string" resultType="com.lmt.entity.Share">
+        select * from cn_share where cn_share_id=#{id}
+    </select>
+</mapper>
