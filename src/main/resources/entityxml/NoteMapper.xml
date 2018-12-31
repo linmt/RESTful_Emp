@@ -26,8 +26,11 @@
             </if>
             <choose>
                 <when test="cn_note_status_id!=null">
-                    and cn_note_status_id='1'
+                    and cn_note_status_id=#{cn_note_status_id}
                 </when>
+                <otherwise>
+                    and cn_note_status_id='1'
+                </otherwise>
             </choose>
         </where>
         order by cn_note_create_time

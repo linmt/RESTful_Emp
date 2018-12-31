@@ -41,10 +41,11 @@ $(function(){
         //发送Ajax
         if(ok){
             $.ajax({
-                async:false,
+                contentType: 'application/json',
                 url:"/user/regist",
                 type:"POST",
-                data:{"name":name,"password":password,"nick":nick},
+                //data:{"name":name,"password":password,"nick":nick},
+                data:JSON.stringify({cn_user_name:name,cn_user_password:password,cn_user_desc:nick}),
                 dataType:"json",
                 success:function(result){
                     if(result.status==0){//成功

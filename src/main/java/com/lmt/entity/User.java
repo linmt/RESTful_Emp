@@ -69,7 +69,8 @@ public class User implements Serializable {
                 ", cn_user_name='" + cn_user_name + '\'' +
                 ", cn_user_password='" + cn_user_password + '\'' +
                 ", cn_user_token='" + cn_user_token + '\'' +
-                ", cn_user_nick='" + cn_user_desc + '\'' +
+                ", cn_user_desc='" + cn_user_desc + '\'' +
+                ", books=" + books +
                 '}';
     }
 }

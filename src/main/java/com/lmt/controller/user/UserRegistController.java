@@ -1,12 +1,10 @@
 package com.lmt.controller.user;
 
 import com.lmt.entity.NoteResult;
+import com.lmt.entity.User;
 import com.lmt.service.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.security.NoSuchAlgorithmException;
@@ -24,9 +22,10 @@ public class UserRegistController {
 
     @RequestMapping(value = "/regist",method = RequestMethod.POST)
     @ResponseBody
-    public NoteResult execute(@PathVariable String name, @PathVariable String password, @PathVariable String nick)
+    public NoteResult execute(@RequestBody User user)
             throws NoSuchAlgorithmException {
-        NoteResult result = userService.regist(name, password, nick);
+        System.out.println(user);
+        NoteResult result = userService.regist(user);
         return result;
     }
 }

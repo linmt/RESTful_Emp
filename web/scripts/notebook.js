@@ -2,9 +2,8 @@
 function loadUserBooks(){
     $.ajax({
         //url:base_url+"/notebook/loadbooks.do",
-        url:"/notebook/loadbooks.form",
-        type:"post",
-        data:{"userId":userId},
+        url:"/notebook/loadbooks/"+userId,
+        type:"get",
         dataType:"json",
         success:function(result){
             if(result.status==0){

@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 public class AddBookController {
     @Resource
     private BookService bookService;
+
     @RequestMapping("/add.form")
     @ResponseBody
     public NoteResult execute(String userId, String bookName){

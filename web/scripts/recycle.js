@@ -1,13 +1,15 @@
 function sureRecycleNote(){
     //获取笔记ID
     var $li = $("#note_list a.checked").parent();
-    var noteId = $li.data("noteId");
+    var cn_note_id = $li.data("noteId");
     //发送Ajax请求
     $.ajax({
         //url:base_url+"/recycle/recycle.do",
-        url:"/recycle/recycle.form",
-        type:"post",
-        data:{"noteId":noteId},
+        url:"/recycle/recycle",
+        contentType: 'application/json',
+        type:"put",
+        //data:{"cn_note_id":cn_note_id},
+        data:JSON.stringify({cn_note_id:cn_note_id}),
         dataType:"json",
         success:function(result){
             if(result.status==0){

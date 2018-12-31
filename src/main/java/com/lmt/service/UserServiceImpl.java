@@ -63,21 +63,21 @@ public class UserServiceImpl implements UserService {
         //result.setData(user);
         return result;
     }
-    public NoteResult regist(String name, String password, String nickName)
+    public NoteResult regist(User user)
             throws NoSuchAlgorithmException {
         NoteResult result = new NoteResult();
         //必要数据检查
-        User has_user = userDao.findByName(name);
+        User has_user = userDao.findByName(user.getCn_user_name());
         if(has_user != null){
             result.setStatus(1);
             result.setMsg("用户名已被占用");
             return result;
         }
         //添加处理
-        User user = new User();
-        user.setCn_user_name(name);//用户名
-        user.setCn_user_desc(nickName);//昵称
-        String md5_password = NoteUtil.md5(password);
+//        User user = new User();
+//        user.setCn_user_name(name);//用户名
+//        user.setCn_user_desc(nickName);//昵称
+        String md5_password = NoteUtil.md5(user.getCn_user_password());
         user.setCn_user_password(md5_password);//设置密码
         user.setCn_user_token(null);//令牌
         String userId = NoteUtil.createId();

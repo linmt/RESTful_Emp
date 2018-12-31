@@ -3,7 +3,8 @@
 <mapper namespace="com.lmt.dao.BookDao">
 
     <select id="findByUserId" parameterType="string" resultType="com.lmt.entity.NoteBook">
-        select * from cn_notebook where cn_user_id=#{userId}
+        select * from cn_notebook
+        where cn_user_id=#{userId}
         order by cn_notebook_createtime
     </select>
 

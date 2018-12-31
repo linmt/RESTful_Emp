@@ -16,10 +16,11 @@ public class RecycleServiceImpl implements RecycleService{
     @Resource
     private NoteDao noteDao;
 
-    public NoteResult recycleNote(String noteId) {
+    //public NoteResult recycleNote(Note note) {
+    public NoteResult recycleNote(String cn_note_id) {
         //noteDao.recycle(noteId);
         Note note = new Note();
-        note.setCn_note_id(noteId);
+        note.setCn_note_id(cn_note_id);
         note.setCn_note_status_id("2");
         noteDao.dynamicUpdate(note);
         NoteResult result = new NoteResult();
